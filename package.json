@@ -1,0 +1,24 @@
+{
+    "name": "bv-manager",
+    "private": true,
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "type": "module",
+    "scripts": {
+        "dev": "bun --filter '*' dev",
+        "lint": "oxlint",
+        "fmt": "oxfmt",
+        "lint:fix": "oxlint --fix",
+        "fmt:check": "oxfmt --check"
+    },
+    "devDependencies": {
+        "@types/bun": "latest",
+        "oxfmt": "^0.59.0",
+        "oxlint": "^1.74.0"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    }
+}
