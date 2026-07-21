@@ -1,0 +1,14 @@
+{
+    "name": "server",
+    "scripts": {
+        "dev": "bun run --hot app.ts"
+    },
+    "dependencies": {
+        "db": "workspace:*",
+        "hono": "^4.12.30",
+        "shared": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/bun": "latest"
+    }
+}

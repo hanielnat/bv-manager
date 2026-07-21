@@ -5,8 +5,7 @@
     "categories": {
         "correctness": "warn"
     },
-    "rules": {
-    },
+    "rules": {},
     "env": {
         "builtin": true,
         "browser": true,

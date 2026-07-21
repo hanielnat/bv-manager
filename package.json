@@ -8,6 +8,8 @@
     "type": "module",
     "scripts": {
         "dev": "bun --filter '*' dev",
+        "dev:web": "bun --filter 'web' dev",
+        "dev:server": "bun --filter 'server' dev",
         "lint": "oxlint",
         "fmt": "oxfmt",
         "lint:fix": "oxlint --fix",
@@ -19,6 +21,7 @@
         "oxlint": "^1.74.0"
     },
     "peerDependencies": {
-        "typescript": "^5"
-    }
+        "typescript": "^5.9.3"
+    },
+    "packageManager": "bun"
 }
