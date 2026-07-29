@@ -1,20 +1,16 @@
 import { TanStackDevtools } from "@tanstack/react-devtools"
-import type { QueryClient } from "@tanstack/react-query"
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
 import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
+import * as React from "react"
 
-import { ThemeProvider } from "#/components/theme-provider"
-import { TooltipProvider } from "#/components/ui/tooltip"
-
-import TanStackQueryDevtools from "../integrations/tanstack-query/devtools"
+import { ThemeProvider } from "#/components/providers/theme-provider"
+import { TooltipProvider } from "@/components/ui/tooltip"
+import type { RouterContext } from "@/router"
 
 import appCss from "../styles.css?url"
 
-interface MyRouterContext {
-    queryClient: QueryClient
-}
-
-export const Route = createRootRouteWithContext<MyRouterContext>()({
+export const Route = createRootRouteWithContext<RouterContext>()({
     head: () => ({
         meta: [
             {
@@ -25,7 +21,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
                 content: "width=device-width, initial-scale=1",
             },
             {
-                title: "TanStack Start Starter",
+                title: "Boinas Verdes AR",
             },
         ],
         links: [
@@ -44,10 +40,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <head>
                 <HeadContent />
             </head>
-            <body className="font-sans antialiased">
-                <ThemeProvider defaultTheme="dark" storageKey="theme">
-                    <TooltipProvider>{children}</TooltipProvider>
-                </ThemeProvider>
+            <body>
+                <TooltipProvider>
+                    <ThemeProvider defaultTheme="dark" storageKey="theme">
+                        {children}
+                    </ThemeProvider>
+                </TooltipProvider>
+
                 <TanStackDevtools
                     config={{
                         position: "bottom-right",
@@ -57,7 +56,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                             name: "Tanstack Router",
                             render: <TanStackRouterDevtoolsPanel />,
                         },
-                        TanStackQueryDevtools,
+                        {
+                            name: "Tanstack Query",
+                            render: <ReactQueryDevtoolsPanel />,
+                        },
                     ]}
                 />
                 <Scripts />

@@ -1,9 +1,11 @@
 {
     "name": "server",
     "scripts": {
-        "dev": "bun run --hot app.ts"
+        "dev": "bun --elide-lines=0 run --hot app.ts"
     },
     "dependencies": {
+        "@better-auth/drizzle-adapter": "^1.6.24",
+        "better-auth": "^1.6.24",
         "db": "workspace:*",
         "hono": "^4.12.30",
         "shared": "workspace:*"

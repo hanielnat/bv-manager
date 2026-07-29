@@ -21,7 +21,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     useSidebar,
-} from "#/components/ui/sidebar.tsx"
+} from "#/features/dashboard/sidebar"
 
 export function NavUser({
     user,

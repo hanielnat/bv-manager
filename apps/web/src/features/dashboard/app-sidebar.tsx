@@ -17,10 +17,10 @@ import {
 } from "@tabler/icons-react"
 import * as React from "react"
 
-import { NavDocuments } from "#/components/nav-documents.tsx"
-import { NavMain } from "#/components/nav-main.tsx"
-import { NavSecondary } from "#/components/nav-secondary.tsx"
-import { NavUser } from "#/components/nav-user.tsx"
+import { NavDocuments } from "#/features/dashboard/nav-documents"
+import { NavMain } from "#/features/dashboard/nav-main"
+import { NavSecondary } from "#/features/dashboard/nav-secondary"
+import { NavUser } from "#/features/dashboard/nav-user"
 import {
     Sidebar,
     SidebarContent,
@@ -29,7 +29,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from "#/components/ui/sidebar.tsx"
+} from "#/features/dashboard/sidebar"
 
 const data = {
     user: {

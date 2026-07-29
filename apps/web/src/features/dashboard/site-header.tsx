@@ -1,7 +1,7 @@
 import { ThemeToggle } from "#/components/theme-toggler.tsx"
 import { Button } from "#/components/ui/button.tsx"
 import { Separator } from "#/components/ui/separator.tsx"
-import { SidebarTrigger } from "#/components/ui/sidebar.tsx"
+import { SidebarTrigger } from "#/features/dashboard/sidebar"
 
 export function SiteHeader() {
     return (

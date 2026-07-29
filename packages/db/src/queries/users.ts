@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm"
 
 import { db } from "@/db"
-import { usersTable } from "@/schema"
+import { user } from "@/schema"
 
 export function selectHelloWorld(): string {
     const query = sql`select "hello world" as text`
@@ -10,6 +10,6 @@ export function selectHelloWorld(): string {
 }
 
 export async function findUsers() {
-    const [result] = await db.select().from(usersTable)
+    const [result] = await db.select().from(user)
     return result
 }

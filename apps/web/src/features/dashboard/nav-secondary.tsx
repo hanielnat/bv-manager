@@ -7,7 +7,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from "#/components/ui/sidebar.tsx"
+} from "#/features/dashboard/sidebar"
 
 export function NavSecondary({
     items,

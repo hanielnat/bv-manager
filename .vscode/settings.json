@@ -1,9 +1,6 @@
 {
     "npm.packageManager": "bun",
     "npm.scriptRunner": "bun",
-    "files.associations": {
-        "*.css": "tailwindcss"
-    },
     "css.validate": false,
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "oxc.oxc-vscode",
@@ -16,5 +13,14 @@
     },
     "files.readonlyInclude": {
         "**/routeTree.gen.ts": true
+    },
+
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "always",
+        "source.removeUnused.ts": "always"
     }
 }

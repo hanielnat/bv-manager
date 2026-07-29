@@ -1,6 +1,12 @@
-import { Database } from "bun:sqlite"
+import { join } from "node:path"
 
-import { drizzle } from "drizzle-orm/bun-sqlite"
+import { createClient } from "@libsql/client"
+import { drizzle } from "drizzle-orm/libsql"
 
-const sqlite = new Database(process.env.DATABASE_URL!)
-export const db = drizzle(sqlite)
+import { schema } from "./schema"
+
+export const client = createClient({
+    url: `file:${join(import.meta.dir, "..", "..", "..", "data", "dev.db")}`,
+})
+
+export const db = drizzle(client, { schema })

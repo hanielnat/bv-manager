@@ -1,12 +1,14 @@
+import { Link } from "@tanstack/react-router"
 import { Calendar, Helicopter, House, Info, LayoutDashboard, UserPlus } from "lucide-react"
 
 import { ThemeToggle } from "#/components/theme-toggler"
 import { Button } from "#/components/ui/button"
+import { cn } from "#/lib/utils"
 
-export function NavBarLanding() {
+export function LandingPageNav({ className, ...props }: { className?: string }) {
     return (
-        <header className="bg-card sticky top-0 z-50 flex max-h-14 flex-row items-center border-b drop-shadow-lg">
-            <div className="m-5 ml-80 flex items-center gap-2">
+        <div className={cn(className)} {...props}>
+            <div className="mr-auto ml-5 flex items-center gap-4">
                 <Button asChild variant="ghost">
                     <div>
                         <Helicopter className="size-100 h-6.5 w-6.5" />
@@ -15,10 +17,11 @@ export function NavBarLanding() {
                 </Button>
             </div>
 
-            <nav className="m-5 flex items-center justify-baseline space-x-2">
-                <Button variant="ghost" size="sm">
-                    <House />
-                    <span>Home</span>
+            <nav className="m-5 flex items-center justify-center space-x-2">
+                <Button variant="ghost" size="sm" asChild>
+                    <Link to="/">
+                        <House /> Home
+                    </Link>
                 </Button>
 
                 <Button variant="ghost" size="sm">
@@ -26,9 +29,10 @@ export function NavBarLanding() {
                     <span>Events</span>
                 </Button>
 
-                <Button variant="ghost" size="sm">
-                    <LayoutDashboard />
-                    <span>Dashboard</span>
+                <Button variant="ghost" size="sm" asChild>
+                    <Link to="/dashboard">
+                        <LayoutDashboard /> Dashboard
+                    </Link>
                 </Button>
 
                 <Button variant="ghost" size="sm">
@@ -37,7 +41,7 @@ export function NavBarLanding() {
                 </Button>
             </nav>
 
-            <div className="mr-80 ml-auto flex items-center gap-2">
+            <div className="mr-5 ml-auto flex items-center gap-4">
                 <Button variant="ghost" size="sm">
                     Login
                 </Button>
@@ -49,6 +53,6 @@ export function NavBarLanding() {
 
                 <ThemeToggle />
             </div>
-        </header>
+        </div>
     )
 }
