@@ -7,10 +7,12 @@
     },
     "scripts": {
         "dev": "bunx --bun vite",
-        "generate-routes": "bunx --bun tsr generate",
         "build": "bunx --bun vite build",
         "preview": "bunx --bun vite preview",
-        "test": "bunx --bu nvitest run"
+        "deploy": "bunx wrangler deploy",
+        "preview:cf": "bunx wrangler preview",
+        "test": "bunx --bu nvitest run",
+        "generate-routes": "bunx --bun tsr generate"
     },
     "dependencies": {
         "@dnd-kit/core": "^6.3.1",
