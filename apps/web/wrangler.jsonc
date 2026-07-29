@@ -1,0 +1,13 @@
+{
+    "$schema": "./node_modules/wrangler/config-schema.json",
+    "name": "bv-manager",
+    "main": "@tanstack/react-start/server-entry",
+    "workers_dev": false,
+    "compatibility_date": "2026-07-29",
+    "compatibility_flags": ["nodejs_compat"],
+    "env": {
+        "staging": {
+            "name": "bv-manager-staging",
+        },
+    },
+}

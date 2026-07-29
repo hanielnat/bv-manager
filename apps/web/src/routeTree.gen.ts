@@ -9,15 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from "./routes/__root"
-import { Route as IndexRouteImport } from "./routes/index"
+import { Route as AppRouteImport } from "./routes/_app"
+import { Route as AuthedRouteRouteImport } from "./routes/_authed/route"
+import { Route as DashboardRouteRouteImport } from "./routes/dashboard/route"
 import { Route as JoinApplicationRouteImport } from "./routes/join-application"
+import { Route as AppIndexRouteImport } from "./routes/_app.index"
+import { Route as AuthedUsersRouteRouteImport } from "./routes/_authed/users/route"
+import { Route as ApiSplatRouteImport } from "./routes/api/$"
 import { Route as DashboardIndexRouteImport } from "./routes/dashboard/index"
 import { Route as AuthedUsersUserIdRouteImport } from "./routes/_authed/users/$userId"
 import { Route as AuthedUsersMeRouteImport } from "./routes/_authed/users/me"
 
-const IndexRoute = IndexRouteImport.update({
-  id: "/",
-  path: "/",
+const AppRoute = AppRouteImport.update({
+  id: "/_app",
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthedRouteRoute = AuthedRouteRouteImport.update({
+  id: "/_authed",
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
+  id: "/dashboard",
+  path: "/dashboard",
   getParentRoute: () => rootRouteImport,
 } as any)
 const JoinApplicationRoute = JoinApplicationRouteImport.update({
@@ -25,40 +38,65 @@ const JoinApplicationRoute = JoinApplicationRouteImport.update({
   path: "/join-application",
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: "/dashboard/",
-  path: "/dashboard/",
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: "/",
+  path: "/",
+  getParentRoute: () => AppRoute,
+} as any)
+const AuthedUsersRouteRoute = AuthedUsersRouteRouteImport.update({
+  id: "/users",
+  path: "/users",
+  getParentRoute: () => AuthedRouteRoute,
+} as any)
+const ApiSplatRoute = ApiSplatRouteImport.update({
+  id: "/api/$",
+  path: "/api/$",
   getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: "/",
+  path: "/",
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const AuthedUsersUserIdRoute = AuthedUsersUserIdRouteImport.update({
-  id: "/_authed/users/$userId",
-  path: "/users/$userId",
-  getParentRoute: () => rootRouteImport,
+  id: "/$userId",
+  path: "/$userId",
+  getParentRoute: () => AuthedUsersRouteRoute,
 } as any)
 const AuthedUsersMeRoute = AuthedUsersMeRouteImport.update({
-  id: "/_authed/users/me",
-  path: "/users/me",
-  getParentRoute: () => rootRouteImport,
+  id: "/me",
+  path: "/me",
+  getParentRoute: () => AuthedUsersRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute
+  "/": typeof AppIndexRoute
+  "/dashboard": typeof DashboardRouteRouteWithChildren
   "/join-application": typeof JoinApplicationRoute
+  "/users": typeof AuthedUsersRouteRouteWithChildren
+  "/api/$": typeof ApiSplatRoute
   "/dashboard/": typeof DashboardIndexRoute
   "/users/$userId": typeof AuthedUsersUserIdRoute
   "/users/me": typeof AuthedUsersMeRoute
 }
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute
+  "/": typeof AppIndexRoute
   "/join-application": typeof JoinApplicationRoute
+  "/users": typeof AuthedUsersRouteRouteWithChildren
+  "/api/$": typeof ApiSplatRoute
   "/dashboard": typeof DashboardIndexRoute
   "/users/$userId": typeof AuthedUsersUserIdRoute
   "/users/me": typeof AuthedUsersMeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  "/": typeof IndexRoute
+  "/_authed": typeof AuthedRouteRouteWithChildren
+  "/dashboard": typeof DashboardRouteRouteWithChildren
+  "/_app": typeof AppRouteWithChildren
   "/join-application": typeof JoinApplicationRoute
+  "/_authed/users": typeof AuthedUsersRouteRouteWithChildren
+  "/api/$": typeof ApiSplatRoute
+  "/_app/": typeof AppIndexRoute
   "/dashboard/": typeof DashboardIndexRoute
   "/_authed/users/$userId": typeof AuthedUsersUserIdRoute
   "/_authed/users/me": typeof AuthedUsersMeRoute
@@ -66,33 +104,66 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    "/" | "/join-application" | "/dashboard/" | "/users/$userId" | "/users/me"
+    | "/"
+    | "/dashboard"
+    | "/join-application"
+    | "/users"
+    | "/api/$"
+    | "/dashboard/"
+    | "/users/$userId"
+    | "/users/me"
   fileRoutesByTo: FileRoutesByTo
-  to: "/" | "/join-application" | "/dashboard" | "/users/$userId" | "/users/me"
-  id:
-    | "__root__"
+  to:
     | "/"
     | "/join-application"
+    | "/users"
+    | "/api/$"
+    | "/dashboard"
+    | "/users/$userId"
+    | "/users/me"
+  id:
+    | "__root__"
+    | "/_authed"
+    | "/dashboard"
+    | "/_app"
+    | "/join-application"
+    | "/_authed/users"
+    | "/api/$"
+    | "/_app/"
     | "/dashboard/"
     | "/_authed/users/$userId"
     | "/_authed/users/me"
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthedRouteRoute: typeof AuthedRouteRouteWithChildren
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  AppRoute: typeof AppRouteWithChildren
   JoinApplicationRoute: typeof JoinApplicationRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-  AuthedUsersUserIdRoute: typeof AuthedUsersUserIdRoute
-  AuthedUsersMeRoute: typeof AuthedUsersMeRoute
+  ApiSplatRoute: typeof ApiSplatRoute
 }
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    "/": {
-      id: "/"
-      path: "/"
+    "/_app": {
+      id: "/_app"
+      path: ""
       fullPath: "/"
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    "/_authed": {
+      id: "/_authed"
+      path: ""
+      fullPath: "/"
+      preLoaderRoute: typeof AuthedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    "/dashboard": {
+      id: "/dashboard"
+      path: "/dashboard"
+      fullPath: "/dashboard"
+      preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     "/join-application": {
@@ -102,36 +173,104 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof JoinApplicationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    "/_app/": {
+      id: "/_app/"
+      path: "/"
+      fullPath: "/"
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    "/_authed/users": {
+      id: "/_authed/users"
+      path: "/users"
+      fullPath: "/users"
+      preLoaderRoute: typeof AuthedUsersRouteRouteImport
+      parentRoute: typeof AuthedRouteRoute
+    }
+    "/api/$": {
+      id: "/api/$"
+      path: "/api/$"
+      fullPath: "/api/$"
+      preLoaderRoute: typeof ApiSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     "/dashboard/": {
       id: "/dashboard/"
-      path: "/dashboard"
+      path: "/"
       fullPath: "/dashboard/"
       preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     "/_authed/users/$userId": {
       id: "/_authed/users/$userId"
-      path: "/users/$userId"
+      path: "/$userId"
       fullPath: "/users/$userId"
       preLoaderRoute: typeof AuthedUsersUserIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthedUsersRouteRoute
     }
     "/_authed/users/me": {
       id: "/_authed/users/me"
-      path: "/users/me"
+      path: "/me"
       fullPath: "/users/me"
       preLoaderRoute: typeof AuthedUsersMeRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthedUsersRouteRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  JoinApplicationRoute: JoinApplicationRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
+interface AuthedUsersRouteRouteChildren {
+  AuthedUsersUserIdRoute: typeof AuthedUsersUserIdRoute
+  AuthedUsersMeRoute: typeof AuthedUsersMeRoute
+}
+
+const AuthedUsersRouteRouteChildren: AuthedUsersRouteRouteChildren = {
   AuthedUsersUserIdRoute: AuthedUsersUserIdRoute,
   AuthedUsersMeRoute: AuthedUsersMeRoute,
+}
+
+const AuthedUsersRouteRouteWithChildren =
+  AuthedUsersRouteRoute._addFileChildren(AuthedUsersRouteRouteChildren)
+
+interface AuthedRouteRouteChildren {
+  AuthedUsersRouteRoute: typeof AuthedUsersRouteRouteWithChildren
+}
+
+const AuthedRouteRouteChildren: AuthedRouteRouteChildren = {
+  AuthedUsersRouteRoute: AuthedUsersRouteRouteWithChildren,
+}
+
+const AuthedRouteRouteWithChildren = AuthedRouteRoute._addFileChildren(
+  AuthedRouteRouteChildren,
+)
+
+interface DashboardRouteRouteChildren {
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+)
+
+interface AppRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  AuthedRouteRoute: AuthedRouteRouteWithChildren,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  AppRoute: AppRouteWithChildren,
+  JoinApplicationRoute: JoinApplicationRoute,
+  ApiSplatRoute: ApiSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

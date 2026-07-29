@@ -4,7 +4,7 @@ import { AppSidebar } from "#/features/dashboard/app-sidebar"
 import { SidebarInset, SidebarProvider } from "#/features/dashboard/sidebar"
 import { SiteHeader } from "#/features/dashboard/site-header"
 
-export const Route = createFileRoute("/dashboard/")({ component: Layout })
+export const Route = createFileRoute("/dashboard")({ component: Layout })
 
 function Layout() {
     return (

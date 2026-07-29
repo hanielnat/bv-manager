@@ -4,7 +4,7 @@ import { LandingPageFooter } from "#/features/landing/footer"
 import { LandingPageHeader } from "#/features/landing/header"
 import { LandingPageNav } from "#/features/landing/nav-landing"
 
-export const Route = createFileRoute("/")({ component: Layout })
+export const Route = createFileRoute("/_app")({ component: Layout })
 
 function Layout() {
     return (
