@@ -1,12 +1,9 @@
-import { join } from "node:path"
-
-import { createClient } from "@libsql/client"
-import { drizzle } from "drizzle-orm/libsql"
+import type { DrizzleD1Database } from "drizzle-orm/d1"
+import { drizzle } from "drizzle-orm/d1"
 
 import { schema } from "./schema"
 
-export const client = createClient({
-    url: `file:${join(import.meta.dir, "..", "..", "..", "data", "dev.db")}`,
-})
-
-export const db = drizzle(client, { schema })
+export type DbInstance = DrizzleD1Database<typeof schema>
+export function createD1(d1: D1Database) {
+    return drizzle(d1, { schema })
+}

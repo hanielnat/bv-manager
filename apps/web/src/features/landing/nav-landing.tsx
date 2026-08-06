@@ -1,15 +1,49 @@
 import { Link } from "@tanstack/react-router"
-import { Calendar, Helicopter, House, Info, LayoutDashboard, UserPlus } from "lucide-react"
+import { Helicopter } from "lucide-react"
 
+import { useAuth } from "#/components/providers/auth-provider"
 import { ThemeToggle } from "#/components/theme-toggler"
 import { Button } from "#/components/ui/button"
+import DiscordButton from "#/components/ui/discord-button"
 import { cn } from "#/lib/utils"
 
-export function LandingPageNav({ className, ...props }: { className?: string }) {
+interface Props {
+    className?: string
+}
+
+export function LandingPageNav({ className }: Props) {
+    const { user, isPending, isAuthenticated, signIn, signOut } = useAuth()
+
+    const handleSignIn = async () => {
+        await signIn()
+    }
+
+    const handleSignOut = async () => {
+        await signOut()
+    }
+
+    const loginComp = () => {
+        return isAuthenticated ? (
+            <div className="flex items-center gap-2">
+                <div>
+                    Bem-vindo novamente <b>{user?.name}</b>
+                </div>
+                <Button disabled={isPending} onClick={handleSignOut}>
+                    Sair
+                </Button>
+            </div>
+        ) : (
+            <DiscordButton variant="default" size="lg" disabled={isPending} onClick={handleSignIn}>
+                Continue com Discord
+            </DiscordButton>
+        )
+    }
+
     return (
-        <div className={cn(className)} {...props}>
+        <div className={cn(className)}>
+            {/* Logo */}
             <div className="mr-auto ml-5 flex items-center gap-4">
-                <Button asChild variant="ghost">
+                <Button asChild variant="ghost" size="lg">
                     <div>
                         <Helicopter className="size-100 h-6.5 w-6.5" />
                         <span className="text-xl">BV</span>
@@ -17,39 +51,28 @@ export function LandingPageNav({ className, ...props }: { className?: string }) 
                 </Button>
             </div>
 
-            <nav className="m-5 flex items-center justify-center space-x-2">
-                <Button variant="ghost" size="sm" asChild>
-                    <Link to="/">
-                        <House /> Home
-                    </Link>
+            {/* Nav items */}
+            <nav className="space-x-5 self-center">
+                <Button variant="ghost" size="lg" asChild>
+                    <Link to="/">Home</Link>
                 </Button>
 
-                <Button variant="ghost" size="sm">
-                    <Calendar />
-                    <span>Events</span>
+                <Button variant="ghost" size="lg">
+                    <span>Eventos</span>
                 </Button>
 
-                <Button variant="ghost" size="sm" asChild>
-                    <Link to="/dashboard">
-                        <LayoutDashboard /> Dashboard
-                    </Link>
+                <Button variant="ghost" size="lg" asChild>
+                    <Link to="/dashboard">Dashboard</Link>
                 </Button>
 
-                <Button variant="ghost" size="sm">
-                    <Info />
-                    <span>About</span>
+                <Button variant="ghost" size="lg">
+                    <span>Sobre</span>
                 </Button>
             </nav>
 
+            {/* Sign-up */}
             <div className="mr-5 ml-auto flex items-center gap-4">
-                <Button variant="ghost" size="sm">
-                    Login
-                </Button>
-
-                <Button variant="outline" size="sm">
-                    <UserPlus />
-                    <span>Register</span>
-                </Button>
+                {loginComp()}
 
                 <ThemeToggle />
             </div>

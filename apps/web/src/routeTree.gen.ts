@@ -8,17 +8,20 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from "@tanstack/react-router"
+
 import { Route as rootRouteImport } from "./routes/__root"
 import { Route as AppRouteImport } from "./routes/_app"
 import { Route as AuthedRouteRouteImport } from "./routes/_authed/route"
-import { Route as DashboardRouteRouteImport } from "./routes/dashboard/route"
-import { Route as JoinApplicationRouteImport } from "./routes/join-application"
 import { Route as AppIndexRouteImport } from "./routes/_app.index"
+import { Route as AppJoinApplicationRouteImport } from "./routes/_app.join-application"
 import { Route as AuthedUsersRouteRouteImport } from "./routes/_authed/users/route"
 import { Route as ApiSplatRouteImport } from "./routes/api/$"
-import { Route as DashboardIndexRouteImport } from "./routes/dashboard/index"
 import { Route as AuthedUsersUserIdRouteImport } from "./routes/_authed/users/$userId"
 import { Route as AuthedUsersMeRouteImport } from "./routes/_authed/users/me"
+
+const DashboardRouteLazyRouteImport = createFileRoute("/dashboard")()
+const DashboardIndexLazyRouteImport = createFileRoute("/dashboard/")()
 
 const AppRoute = AppRouteImport.update({
   id: "/_app",
@@ -28,19 +31,21 @@ const AuthedRouteRoute = AuthedRouteRouteImport.update({
   id: "/_authed",
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardRouteRoute = DashboardRouteRouteImport.update({
+const DashboardRouteLazyRoute = DashboardRouteLazyRouteImport.update({
   id: "/dashboard",
   path: "/dashboard",
   getParentRoute: () => rootRouteImport,
-} as any)
-const JoinApplicationRoute = JoinApplicationRouteImport.update({
-  id: "/join-application",
-  path: "/join-application",
-  getParentRoute: () => rootRouteImport,
-} as any)
+} as any).lazy(() =>
+  import("./routes/dashboard/route.lazy").then((d) => d.Route),
+)
 const AppIndexRoute = AppIndexRouteImport.update({
   id: "/",
   path: "/",
+  getParentRoute: () => AppRoute,
+} as any)
+const AppJoinApplicationRoute = AppJoinApplicationRouteImport.update({
+  id: "/join-application",
+  path: "/join-application",
   getParentRoute: () => AppRoute,
 } as any)
 const AuthedUsersRouteRoute = AuthedUsersRouteRouteImport.update({
@@ -53,11 +58,13 @@ const ApiSplatRoute = ApiSplatRouteImport.update({
   path: "/api/$",
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
+const DashboardIndexLazyRoute = DashboardIndexLazyRouteImport.update({
   id: "/",
   path: "/",
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
+  getParentRoute: () => DashboardRouteLazyRoute,
+} as any).lazy(() =>
+  import("./routes/dashboard/index.lazy").then((d) => d.Route),
+)
 const AuthedUsersUserIdRoute = AuthedUsersUserIdRouteImport.update({
   id: "/$userId",
   path: "/$userId",
@@ -71,33 +78,33 @@ const AuthedUsersMeRoute = AuthedUsersMeRouteImport.update({
 
 export interface FileRoutesByFullPath {
   "/": typeof AppIndexRoute
-  "/dashboard": typeof DashboardRouteRouteWithChildren
-  "/join-application": typeof JoinApplicationRoute
+  "/dashboard": typeof DashboardRouteLazyRouteWithChildren
   "/users": typeof AuthedUsersRouteRouteWithChildren
+  "/join-application": typeof AppJoinApplicationRoute
   "/api/$": typeof ApiSplatRoute
-  "/dashboard/": typeof DashboardIndexRoute
+  "/dashboard/": typeof DashboardIndexLazyRoute
   "/users/$userId": typeof AuthedUsersUserIdRoute
   "/users/me": typeof AuthedUsersMeRoute
 }
 export interface FileRoutesByTo {
   "/": typeof AppIndexRoute
-  "/join-application": typeof JoinApplicationRoute
   "/users": typeof AuthedUsersRouteRouteWithChildren
+  "/join-application": typeof AppJoinApplicationRoute
   "/api/$": typeof ApiSplatRoute
-  "/dashboard": typeof DashboardIndexRoute
+  "/dashboard": typeof DashboardIndexLazyRoute
   "/users/$userId": typeof AuthedUsersUserIdRoute
   "/users/me": typeof AuthedUsersMeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   "/_authed": typeof AuthedRouteRouteWithChildren
-  "/dashboard": typeof DashboardRouteRouteWithChildren
   "/_app": typeof AppRouteWithChildren
-  "/join-application": typeof JoinApplicationRoute
+  "/dashboard": typeof DashboardRouteLazyRouteWithChildren
   "/_authed/users": typeof AuthedUsersRouteRouteWithChildren
+  "/_app/join-application": typeof AppJoinApplicationRoute
   "/api/$": typeof ApiSplatRoute
   "/_app/": typeof AppIndexRoute
-  "/dashboard/": typeof DashboardIndexRoute
+  "/dashboard/": typeof DashboardIndexLazyRoute
   "/_authed/users/$userId": typeof AuthedUsersUserIdRoute
   "/_authed/users/me": typeof AuthedUsersMeRoute
 }
@@ -106,8 +113,8 @@ export interface FileRouteTypes {
   fullPaths:
     | "/"
     | "/dashboard"
-    | "/join-application"
     | "/users"
+    | "/join-application"
     | "/api/$"
     | "/dashboard/"
     | "/users/$userId"
@@ -115,8 +122,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | "/"
-    | "/join-application"
     | "/users"
+    | "/join-application"
     | "/api/$"
     | "/dashboard"
     | "/users/$userId"
@@ -124,10 +131,10 @@ export interface FileRouteTypes {
   id:
     | "__root__"
     | "/_authed"
-    | "/dashboard"
     | "/_app"
-    | "/join-application"
+    | "/dashboard"
     | "/_authed/users"
+    | "/_app/join-application"
     | "/api/$"
     | "/_app/"
     | "/dashboard/"
@@ -137,9 +144,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AuthedRouteRoute: typeof AuthedRouteRouteWithChildren
-  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
-  JoinApplicationRoute: typeof JoinApplicationRoute
+  DashboardRouteLazyRoute: typeof DashboardRouteLazyRouteWithChildren
   ApiSplatRoute: typeof ApiSplatRoute
 }
 
@@ -163,14 +169,7 @@ declare module "@tanstack/react-router" {
       id: "/dashboard"
       path: "/dashboard"
       fullPath: "/dashboard"
-      preLoaderRoute: typeof DashboardRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    "/join-application": {
-      id: "/join-application"
-      path: "/join-application"
-      fullPath: "/join-application"
-      preLoaderRoute: typeof JoinApplicationRouteImport
+      preLoaderRoute: typeof DashboardRouteLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
     "/_app/": {
@@ -178,6 +177,13 @@ declare module "@tanstack/react-router" {
       path: "/"
       fullPath: "/"
       preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    "/_app/join-application": {
+      id: "/_app/join-application"
+      path: "/join-application"
+      fullPath: "/join-application"
+      preLoaderRoute: typeof AppJoinApplicationRouteImport
       parentRoute: typeof AppRoute
     }
     "/_authed/users": {
@@ -198,8 +204,8 @@ declare module "@tanstack/react-router" {
       id: "/dashboard/"
       path: "/"
       fullPath: "/dashboard/"
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
+      preLoaderRoute: typeof DashboardIndexLazyRouteImport
+      parentRoute: typeof DashboardRouteLazyRoute
     }
     "/_authed/users/$userId": {
       id: "/_authed/users/$userId"
@@ -243,33 +249,33 @@ const AuthedRouteRouteWithChildren = AuthedRouteRoute._addFileChildren(
   AuthedRouteRouteChildren,
 )
 
-interface DashboardRouteRouteChildren {
-  DashboardIndexRoute: typeof DashboardIndexRoute
-}
-
-const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardIndexRoute: DashboardIndexRoute,
-}
-
-const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
-  DashboardRouteRouteChildren,
-)
-
 interface AppRouteChildren {
+  AppJoinApplicationRoute: typeof AppJoinApplicationRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppJoinApplicationRoute: AppJoinApplicationRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface DashboardRouteLazyRouteChildren {
+  DashboardIndexLazyRoute: typeof DashboardIndexLazyRoute
+}
+
+const DashboardRouteLazyRouteChildren: DashboardRouteLazyRouteChildren = {
+  DashboardIndexLazyRoute: DashboardIndexLazyRoute,
+}
+
+const DashboardRouteLazyRouteWithChildren =
+  DashboardRouteLazyRoute._addFileChildren(DashboardRouteLazyRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   AuthedRouteRoute: AuthedRouteRouteWithChildren,
-  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   AppRoute: AppRouteWithChildren,
-  JoinApplicationRoute: JoinApplicationRoute,
+  DashboardRouteLazyRoute: DashboardRouteLazyRouteWithChildren,
   ApiSplatRoute: ApiSplatRoute,
 }
 export const routeTree = rootRouteImport

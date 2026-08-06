@@ -5,13 +5,13 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
+const PORT = Number(process.env.PORT) || 3000
+
 const config = defineConfig({
     resolve: { tsconfigPaths: true },
 
-    build: {
-        rolldownOptions: {
-            external: ["bun", /^bun:/],
-        },
+    server: {
+        port: PORT,
     },
 
     plugins: [

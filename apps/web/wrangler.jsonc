@@ -7,22 +7,54 @@
     "compatibility_flags": ["nodejs_compat"],
     "observability": {
         "enabled": false,
-        "head_sampling_rate": 1,
         "logs": {
             "enabled": true,
-            "head_sampling_rate": 1,
             "persist": true,
             "invocation_logs": true,
         },
-        "traces": {
-            "enabled": false,
-            "persist": true,
-            "head_sampling_rate": 1,
-        },
     },
+    "d1_databases": [
+        {
+            "binding": "DB",
+            "database_name": "bv",
+            "database_id": "39efd212-61a3-4735-90a9-0fb8490645d0",
+            "migrations_dir": "../../packages/db/drizzle",
+        },
+    ],
     "env": {
+        "production": {
+            "name": "bv-manager-production",
+            "workers_dev": true,
+            "vars": {
+                "ENVIRONMENT": "production",
+                "BASE_URL": "https://bv-manager.olivs.workers.dev",
+                "BETTER_AUTH_URL": "https://bv-manager.olivs.workers.dev",
+            },
+            "d1_databases": [
+                {
+                    "binding": "DB",
+                    "database_name": "bv",
+                    "database_id": "39efd212-61a3-4735-90a9-0fb8490645d0",
+                    "migrations_dir": "../../packages/db/drizzle",
+                },
+            ],
+        },
         "staging": {
             "name": "bv-manager-staging",
+            "workers_dev": true,
+            "vars": {
+                "ENVIRONMENT": "staging",
+                "BASE_URL": "https://bv-manager-staging.olivs.workers.dev",
+                "BETTER_AUTH_URL": "https://bv-manager-staging.olivs.workers.dev",
+            },
+            "d1_databases": [
+                {
+                    "binding": "DB",
+                    "database_name": "bv",
+                    "database_id": "39efd212-61a3-4735-90a9-0fb8490645d0",
+                    "migrations_dir": "../../packages/db/drizzle",
+                },
+            ],
         },
     },
 }

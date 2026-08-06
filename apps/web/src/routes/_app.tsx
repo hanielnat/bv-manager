@@ -4,18 +4,20 @@ import { LandingPageFooter } from "#/features/landing/footer"
 import { LandingPageHeader } from "#/features/landing/header"
 import { LandingPageNav } from "#/features/landing/nav-landing"
 
-export const Route = createFileRoute("/_app")({ component: Layout })
+export const Route = createFileRoute("/_app")({
+    component: Layout,
+})
 
 function Layout() {
     return (
         <div className="grid size-full min-h-screen">
-            <LandingPageHeader className="sticky top-2 z-40 mx-auto w-2/3">
-                <LandingPageNav className="mx-auto" />
+            <LandingPageHeader className="sticky top-4 z-40 mx-auto w-2/3">
+                <LandingPageNav className="mx-auto flex flex-1" />
             </LandingPageHeader>
 
             <Outlet />
 
-            <LandingPageFooter />
+            <LandingPageFooter className="self-end" />
         </div>
     )
 }

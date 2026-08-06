@@ -3,15 +3,14 @@
     "type": "module",
     "module": "index.ts",
     "scripts": {
-        "build": "bun build --target bun src/index.ts --outdir dist/",
+        "build": "bun build --target bun index.ts --outdir dist/",
         "check": "bunx tsc --noEmit -p tsconfig.json",
-        "db:generate": "bun --env-file=../../.env drizzle-kit generate",
-        "db:migrate": "bun --env-file=../../.env drizzle-kit migrate",
-        "db:push": "bun --env-file=../../.env drizzle-kit push --url='file:../../data/dev.db' --dialect=sqlite --schema=./src/schema.ts",
-        "db:studio": "bun --env-file=../../.env drizzle-kit studio"
+        "db:generate": "bun drizzle-kit generate",
+        "db:migrate": "bun drizzle-kit migrate",
+        "db:studio": "bun drizzle-kit studio",
+        "db:studio:local": "bun drizzle-kit studio --config=drizzle.config.local.ts"
     },
     "dependencies": {
-        "@libsql/client": "^0.17.4",
         "drizzle-orm": "^0.45.2"
     },
     "devDependencies": {

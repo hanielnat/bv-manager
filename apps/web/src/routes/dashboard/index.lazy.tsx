@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { createLazyFileRoute } from "@tanstack/react-router"
 
 import { ChartAreaInteractive } from "#/features/dashboard/chart-area-interactive.tsx"
 import { DataTable } from "#/features/dashboard/data-table.tsx"
 import data from "#/features/dashboard/data.json"
 import { SectionCards } from "#/features/dashboard/section-cards.tsx"
 
-export const Route = createFileRoute("/dashboard/")({ component: Page })
+export const Route = createLazyFileRoute("/dashboard/")({ component: Page })
 
 function Page() {
     return (

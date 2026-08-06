@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_app/")({ component: Page })
 function Page() {
     return (
         <>
-            <LandingPageHero />
+            <LandingPageHero className="max-w-2/3 md:max-w-full" />
             <LandingPageContent />
         </>
     )

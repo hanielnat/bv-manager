@@ -1,3 +1,4 @@
+import type { BetterFetchError } from "better-auth/react"
 import * as React from "react"
 
 import { authClient, useSession, type User } from "#/lib/auth-client"
@@ -5,8 +6,11 @@ import { authClient, useSession, type User } from "#/lib/auth-client"
 export interface AuthContextType {
     isPending: boolean
     isAuthenticated: boolean
+    isRefetching: boolean
     signIn: (socialProvider?: string) => Promise<void>
     signOut: () => Promise<void>
+    refetch: () => Promise<void>
+    error: BetterFetchError | null
     user: User | undefined
 }
 
@@ -17,35 +21,40 @@ interface AuthContextProps {
 }
 
 export function AuthContextProvider({ children }: AuthContextProps) {
-    const { data: session, isPending } = useSession()
-    const [user, setUser] = React.useState<User | undefined>(session?.user)
+    const { data: session, isPending, error, isRefetching, refetch } = useSession()
+    const user = session?.user
     const isAuthenticated = !!user
 
-    const signIn = React.useCallback(
-        async (socialProvider?: string) => {
-            if (!socialProvider) {
-                socialProvider = "discord"
-            }
+    const signIn = React.useCallback(async (socialProvider = "discord") => {
+        const res = await authClient.signIn.social({
+            provider: socialProvider,
+        })
 
-            await authClient.signIn.social({
-                provider: socialProvider,
-            })
-
-            setUser(session?.user)
-        },
-        [session?.user],
-    )
+        if (res.error) {
+            console.error(res.error)
+        }
+    }, [])
 
     const signOut = React.useCallback(async () => {
         await authClient.signOut()
-        setUser(undefined)
-    }, [])
+        await refetch()
+    }, [refetch])
 
-    return (
-        <AuthContext.Provider value={{ isPending, isAuthenticated, user, signIn, signOut }}>
-            {children}
-        </AuthContext.Provider>
+    const value = React.useMemo(
+        () => ({
+            isPending,
+            isAuthenticated,
+            isRefetching,
+            error,
+            user,
+            signIn,
+            signOut,
+            refetch,
+        }),
+        [isPending, isAuthenticated, isRefetching, error, user, signIn, signOut, refetch],
     )
+
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

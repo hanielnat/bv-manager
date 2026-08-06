@@ -1,14 +1,13 @@
 import { createMiddleware } from "hono/factory"
 
-import { auth } from "@/lib/auth"
-
 import type { AppEnv } from "../../app"
 
 export const authMiddleware = createMiddleware<AppEnv>(async (c, next) => {
-    const session = await auth.api.getSession({ headers: c.req.raw.headers })
+    const auth = c.get("auth")
+    const session = await auth?.api.getSession({ headers: c.req.raw.headers })
 
     if (!session) {
-        return c.json({ message: "Unauthorized.." }, 401)
+        return c.json({ error: "Unauthorized" }, 401)
     }
 
     c.set("user", session.user)

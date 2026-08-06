@@ -1,4 +1,7 @@
 .tanstack/
+.wrangler/
+data/**
+!data/.gitkeep
 dist/
 .dist/
 drizzle/
@@ -6,5 +9,7 @@ drizzle/
 .env
 *.env
 .env.local
+.vars
+.dev.vars*
 node_modules
 .next

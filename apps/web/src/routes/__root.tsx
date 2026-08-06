@@ -5,6 +5,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import * as React from "react"
 
 import { ThemeProvider } from "#/components/providers/theme-provider"
+import { AuthContextProvider } from "@/components/providers/auth-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import type { RouterContext } from "@/router"
 
@@ -41,11 +42,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 <HeadContent />
             </head>
             <body>
-                <TooltipProvider>
-                    <ThemeProvider defaultTheme="dark" storageKey="theme">
-                        {children}
-                    </ThemeProvider>
-                </TooltipProvider>
+                <AuthContextProvider>
+                    <TooltipProvider>
+                        <ThemeProvider defaultTheme="dark" storageKey="theme">
+                            {children}
+                        </ThemeProvider>
+                    </TooltipProvider>
+                </AuthContextProvider>
 
                 <TanStackDevtools
                     config={{
