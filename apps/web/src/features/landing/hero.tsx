@@ -8,7 +8,7 @@ import { cn } from "#/lib/utils.ts"
 export function LandingPageHero({ className }: { className?: string }) {
     return (
         <section className={cn("mx-auto h-[calc(100dvh-3.5rem)] w-full", className)}>
-            <Container className="flex flex-col items-start md:mx-auto md:h-full md:flex-row md:items-center">
+            <Container className="container flex flex-col items-start md:mx-auto md:h-full md:flex-row md:items-center">
                 <Container className="z-10 mr-4 flex max-w-1/2 min-w-1/2 flex-col gap-4">
                     <h1 className="overflow-hidden text-6xl">
                         Aqui o <b className="">MILSIM</b> é levado a{" "}
@@ -38,9 +38,9 @@ export function LandingPageHero({ className }: { className?: string }) {
                     </div>
                 </Container>
 
-                <Container className="bg-card ml-4 h-1/2 w-full rounded-lg border p-px drop-shadow-lg md:ml-0">
+                <Container className="bg-card ml-4 size-max rounded-lg border p-px drop-shadow-lg md:ml-0">
                     <iframe
-                        className="size-full rounded-lg border-0"
+                        className="aspect-video rounded-lg border-0"
                         src="https://www.youtube-nocookie.com/embed/SWkdnz2KqMc?si=grOKE5nFht3nN4jh&amp;controls=0"
                         title="YouTube video player"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
